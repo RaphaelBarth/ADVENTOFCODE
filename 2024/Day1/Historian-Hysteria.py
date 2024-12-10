@@ -1,9 +1,15 @@
+temp = """3   4
+4   3
+2   5
+1   3
+3   9
+3   3"""
 
-
-with open("Day1_data.txt") as data:
+with open("2024\Day1\data.txt") as file:
+    data = file.read() 
     list1 = []
     list2 = []
-    for line in data:
+    for line in data.split('\n'):
        ele1,ele2 =  line.strip().split()
        list1.append(int(ele1))
        list2.append(int(ele2))

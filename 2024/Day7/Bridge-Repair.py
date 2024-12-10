@@ -50,7 +50,7 @@ def is_calculable_1(equation):
     return False
 
 
-with open("2024\Day7\Day7_data.txt") as file:
+with open("2024/Day7/data.txt") as file:
     data = file.read()
     equations = []
     for line in data.splitlines():
@@ -58,9 +58,6 @@ with open("2024\Day7\Day7_data.txt") as file:
         right = list(map(int,right.split()))
         left = int(left)
         equations.append((left,right))
-
-
-    print(len(equations))
 
     valide_calibration_results = [equation[0] for equation in equations if is_calculable_1(equation)]
     print (sum(valide_calibration_results))

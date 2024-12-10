@@ -60,7 +60,7 @@ def fix_update(rules,update:list):
     return update
 
 
-with open("2024/Day5/Day5_data.txt") as file:
+with open("2024/Day5/data.txt") as file:
     data = file.read()
     rules,queue = [],[]
     #print(data)

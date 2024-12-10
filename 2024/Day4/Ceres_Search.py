@@ -14,7 +14,7 @@ MAMMMXMMMM
 MXMXAXMASX"""
 
 
-with open("Day4_data.txt") as file:
+with open("2024/Day4/data.txt") as file:
     data = file.read()
     matrix = np.array([list(line) for line in data.strip().split('\n')])
 

@@ -22,7 +22,7 @@ def is_out_of_bound(index,grid):
         return True
     return False
 
-with open("2024\Day8\data.txt") as file:
+with open("2024/Day8/data.txt") as file:
     data = file.read()
     # get the frequencies
     frequencies  = set(data.replace(".","").replace("\n",""))
