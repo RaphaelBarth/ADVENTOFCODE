@@ -59,7 +59,7 @@ def walk_field(field,limit = None):
 
 
 
-with open("2024/Day6/Day6_data.txt") as file:
+with open("2024/Day6/data.txt") as file:
     data = file.read()
     field = np.array([list(line.strip()) for line in data.split('\n')])
 

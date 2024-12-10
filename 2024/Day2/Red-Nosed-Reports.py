@@ -9,19 +9,22 @@ def differ(lis):
 def ordered(ele):
     return (ele == sorted(ele)) or (ele == sorted(ele,reverse=True))
 
-with open("Day2_data.txt") as data:
+with open("2024/Day2/data.txt") as file:
+    data = file
     data = [list(map(int, line.strip().split())) for line in data]
     
-    reports= 0
+    safe_reports = new_save_reports= 0
     for ele in data:
         if ordered(ele) and differ(ele):
-            reports += 1
-        else:
+            safe_reports += 1
+        else: # this is part 2
             for idx in range(len(ele)):
                 tmp = ele[::]
                 del tmp[idx] 
                 if ordered(tmp) and differ(tmp):
-                    reports+=1
+                    new_save_reports+=1
                     break
-                
-    print(reports)
+
+    new_save_reports +=safe_reports      
+    print(f"{safe_reports=}")
+    print(f"{new_save_reports=}")
