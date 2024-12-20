@@ -61,9 +61,8 @@ with open("2024/Day14/data.txt") as file:
     ax.set_ylim(SHAPE_Y)
     ax.set_xlim(SHAPE_X)
     grid = np.zeros((SHAPE_Y,SHAPE_X),dtype=int)
-
     def update(frame):
-        global second
+        global second, highest
         second += 1
 
         robot_possition = []
@@ -79,7 +78,7 @@ with open("2024/Day14/data.txt") as file:
         ax.clear()
         ax.scatter(x,y)
         fig.canvas.draw()
-        fig.savefig(f"2024/Day14/temp/{second}.png")
+        fig.savefig(f"2024/Day14/temp/{second}.txt")
 
         if second == SECONDS:
             quad_y = SHAPE_Y // 2
