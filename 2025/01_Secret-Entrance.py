@@ -1,21 +1,7 @@
 from timeit import default_timer as timer
+from aoc_utils.aoc import AoC
 
-EXAMPLE = False
-if EXAMPLE: 
-    document ="""L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82"""
-else:
-    with open("2025/Day1/data.txt") as f:
-        document = f.read().strip()
-
+aoc = AoC(day=1, year=2025, use_example=False)
 
 MAX_DIAL_NUMBER = 99
 
@@ -23,7 +9,7 @@ timestamp1 = timer()
 dial_position = 50
 dial_zeroed = 0
 # split the instructions by line
-for instruction in document.split("\n"):
+for instruction in aoc.DATA.split("\n"):
     direction, steps = instruction[0], int(instruction[1:])
 
     # rotate the dial by the given steps
@@ -42,7 +28,7 @@ dial_zeroed = 0
 is_zero = False
 
 # split the instructions by line
-for instruction in document.split("\n"):
+for instruction in aoc.DATA.split("\n"):
     direction, steps = instruction[0], int(instruction[1:])
 
     # check if the dial is at zero before rotation

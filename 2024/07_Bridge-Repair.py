@@ -1,18 +1,6 @@
-from enum import Enum, StrEnum
 from functools import reduce
 import numpy as np
-from time import *
-import numpy as np
-
-temp = """190: 10 19
-3267: 81 40 27
-83: 17 5
-156: 15 6
-7290: 6 8 6 15
-161011: 16 10 13
-192: 17 8 14
-21037: 9 7 18 13
-292: 11 6 16 20"""
+from aoc_utils.aoc import AoC
 
 def is_calculable_2(equation):
     expected_result,operands = equation[0],equation[1]
@@ -49,21 +37,21 @@ def is_calculable_1(equation):
         
     return False
 
+aoc = AoC(day=7, year=2024, use_example=False)
+data = aoc.DATA
 
-with open("2024/Day7/data.txt") as file:
-    data = file.read()
-    equations = []
-    for line in data.splitlines():
-        left, right = line.split(':')
-        right = list(map(int,right.split()))
-        left = int(left)
-        equations.append((left,right))
+equations = []
+for line in data.splitlines():
+    left, right = line.split(':')
+    right = list(map(int,right.split()))
+    left = int(left)
+    equations.append((left,right))
 
-    valide_calibration_results = [equation[0] for equation in equations if is_calculable_1(equation)]
-    print (sum(valide_calibration_results))
+valide_calibration_results = [equation[0] for equation in equations if is_calculable_1(equation)]
+print (sum(valide_calibration_results))
 
-    valide_calibration_results = [equation[0] for equation in equations if is_calculable_2(equation)]
-    print (sum(valide_calibration_results))
+valide_calibration_results = [equation[0] for equation in equations if is_calculable_2(equation)]
+print (sum(valide_calibration_results))
 
 
 

@@ -1,3 +1,4 @@
+from aoc_utils.aoc import AoC
 
 def differ(lis):
     for idx in range(1,len(lis)):
@@ -9,22 +10,23 @@ def differ(lis):
 def ordered(ele):
     return (ele == sorted(ele)) or (ele == sorted(ele,reverse=True))
 
-with open("2024/Day2/data.txt") as file:
-    data = file
-    data = [list(map(int, line.strip().split())) for line in data]
-    
-    safe_reports = new_save_reports= 0
-    for ele in data:
-        if ordered(ele) and differ(ele):
-            safe_reports += 1
-        else: # this is part 2
-            for idx in range(len(ele)):
-                tmp = ele[::]
-                del tmp[idx] 
-                if ordered(tmp) and differ(tmp):
-                    new_save_reports+=1
-                    break
 
-    new_save_reports +=safe_reports      
-    print(f"{safe_reports=}")
-    print(f"{new_save_reports=}")
+aoc = AoC(day=2, year=2024, use_example=False) 
+data = [list(map(int, line.split())) for line in aoc.DATA.splitlines()]
+
+
+safe_reports = new_save_reports= 0
+for ele in data:
+    if ordered(ele) and differ(ele):
+        safe_reports += 1
+    else: # this is part 2
+        for idx in range(len(ele)):
+            tmp = ele[::]
+            del tmp[idx] 
+            if ordered(tmp) and differ(tmp):
+                new_save_reports+=1
+                break
+
+new_save_reports +=safe_reports      
+print(f"{safe_reports=}")
+print(f"{new_save_reports=}")

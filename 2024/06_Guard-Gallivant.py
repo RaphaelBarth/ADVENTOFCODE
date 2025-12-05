@@ -1,18 +1,7 @@
-from enum import Enum, StrEnum
-import re
-from time import *
+from enum import StrEnum
 import numpy as np
+from aoc_utils.aoc import AoC
 
-temp = """....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#..."""
 DEBUG_PRINTING = False
 
 class DIRECTION(StrEnum):
@@ -58,27 +47,26 @@ def walk_field(field,limit = None):
 
 
 
+aoc = AoC(day=6, year=2024, use_example=False)
+data = aoc.DATA
+field = np.array([list(line.strip()) for line in data.split('\n')])
 
-with open("2024/Day6/data.txt") as file:
-    data = file.read()
-    field = np.array([list(line.strip()) for line in data.split('\n')])
+# part1
+resuld_field = walk_field(field.copy())
+print(np.count_nonzero(resuld_field == 'x'))
 
-    # part1
-    resuld_field = walk_field(field.copy())
-    print(np.count_nonzero(resuld_field == 'x'))
+# part2
+obstacles = 0
+guard_y,guard_x = np.where(field=="^")
+for iy, ix in np.ndindex(field.shape):
+    if guard_x == ix and guard_y == iy:
+        pass
+    else:
+        temp_field = field.copy()
+        temp_field[iy,ix] = '#'
+        obstacles += 1 if walk_field(temp_field,limit=10_000) is None else 0
+        #print((iy, ix),obstacles)
 
-    # part2
-    obstacles = 0
-    guard_y,guard_x = np.where(field=="^")
-    for iy, ix in np.ndindex(field.shape):
-        if guard_x == ix and guard_y == iy:
-            pass
-        else:
-            temp_field = field.copy()
-            temp_field[iy,ix] = '#'
-            obstacles += 1 if walk_field(temp_field,limit=10_000) is None else 0
-            #print((iy, ix),obstacles)
-
-    print(f"{obstacles=}")
+print(f"{obstacles=}")
 
 

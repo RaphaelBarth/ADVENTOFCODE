@@ -1,15 +1,6 @@
 import numpy as np
 from timeit import default_timer as timer
-
-
-temp =  """89010123
-78121874
-87430965
-96549874
-45678903
-32019012
-01329801
-10456732"""
+from aoc_utils.aoc import AoC
 
 def check_in_map(topographic_map,possition):
     y_map,x_map = topographic_map.shape
@@ -47,24 +38,23 @@ def hiking_scores(topographic_map,possition):
     return trailheads
 
 
-with open("2024/Day10/data.txt") as file:
-    data = file.read()
-    #data = temp
+aoc = AoC(day=10, year=2024, use_example=False)
+data = aoc.DATA
 
-    timestamp1 = timer()
-    topographic_map = np.array([list(line.strip()) for line in data.split('\n')],dtype=int)
-    starting_points = list(zip(*np.where(topographic_map == 0)))
-    target_points = list(zip(*np.where(topographic_map == 9)))
+timestamp1 = timer()
+topographic_map = np.array([list(line.strip()) for line in data.split('\n')],dtype=int)
+starting_points = list(zip(*np.where(topographic_map == 0)))
+target_points = list(zip(*np.where(topographic_map == 9)))
 
 
-    trailheads_score = [hiking_scores(topographic_map,starting_point) for starting_point in starting_points]
-    trailheads_score = sum([len(set(zip(trail[::2], trail[1::2]))) for trail in trailheads_score])
-    print(f"PART1: {trailheads_score=} in {(timestamp2:=timer())-timestamp1}sec")
-        
-
- 
+trailheads_score = [hiking_scores(topographic_map,starting_point) for starting_point in starting_points]
+trailheads_score = sum([len(set(zip(trail[::2], trail[1::2]))) for trail in trailheads_score])
+print(f"PART1: {trailheads_score=} in {(timestamp2:=timer())-timestamp1}sec")
     
 
-    trailheads_score = sum([hiking(topographic_map,starting_point) for starting_point in starting_points])
-    print(f"PART1: {trailheads_score=} in {(timestamp2:=timer())-timestamp1}sec")
+
+
+
+trailheads_score = sum([hiking(topographic_map,starting_point) for starting_point in starting_points])
+print(f"PART1: {trailheads_score=} in {(timestamp2:=timer())-timestamp1}sec")
 

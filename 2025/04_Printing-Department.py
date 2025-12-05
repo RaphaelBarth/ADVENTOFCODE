@@ -1,22 +1,9 @@
 from timeit import default_timer as timer
 import numpy as np
+from aoc_utils.aoc import AoC
 
-EXAMPLE = False
-if EXAMPLE: 
-    data = """..@@.@@@@.
-@@@.@.@.@@
-@@@@@.@.@@
-@.@@@@..@.
-@@.@@@@.@@
-.@@@@@@@.@
-.@.@.@.@@@
-@.@@@.@@@@
-.@@@@@@@@.
-@.@.@@@.@."""
-else:
-    with open("2025/Day4/data.txt") as f:
-        data = f.read().strip()
-
+aoc = AoC(day=4, year=2025, use_example=False)
+data = aoc.DATA
 
 # start PART 1
 timestamp1 = timer()

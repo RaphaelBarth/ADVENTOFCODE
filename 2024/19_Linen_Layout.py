@@ -1,18 +1,6 @@
 import functools
 from timeit import default_timer as timer
-import re
-
-
-example= """r, wr, b, g, bwu, rb, gb, br
-
-brwrr
-bggr
-gbbr
-rrbgbr
-ubwu
-bwurrg
-brgr
-bbrgwb"""
+from aoc_utils.aoc import AoC
 
 def check_design(design):
     if not len(design):
@@ -33,20 +21,21 @@ def count_design(design):
             different_ways+=count_design(design[:idx])
     return different_ways
 
-with open("2024/Day19/data.txt") as file:
-    data = file.read().splitlines()
-    #data = example.splitlines()
-    towel_patterns = data[0].split(', ')
-    designs = data[2:]    
+aoc = AoC(day=19, year=2024, use_example=True)
+data = aoc.DATA.splitlines()
 
-    ok = 0
-    timestamp = timer()
+#data = example.splitlines()
+towel_patterns = data[0].split(', ')
+designs = data[2:]    
 
-    possible_designs = sum([check_design(design) for design in designs])
-    print(f"PART1: {possible_designs=} in {(timer())-timestamp}sec")
+ok = 0
+timestamp = timer()
 
-    different_ways = sum([count_design(design) for design in designs])
-    print(f"PART1: {different_ways=} in {(timer())-timestamp}sec")
+possible_designs = sum([check_design(design) for design in designs])
+print(f"PART1: {possible_designs=} in {(timer())-timestamp}sec")
+
+different_ways = sum([count_design(design) for design in designs])
+print(f"PART1: {different_ways=} in {(timer())-timestamp}sec")
 
             
             

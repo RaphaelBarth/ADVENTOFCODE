@@ -1,21 +1,7 @@
-from collections import deque
-from concurrent.futures import ThreadPoolExecutor
-import functools
-from threading import Thread
 import numpy as np
 from timeit import default_timer as timer
+from aoc_utils.aoc import AoC
 
-
-temp =  """RRRRIICCFF
-RRRRIICCCF
-VVRRRCCFFF
-VVRCCCJFFF
-VVVVCJJCFE
-VVIVCCJJEE
-VVIIICJJEE
-MIIIIIJJEE
-MIIISIJEEE
-MMMISSJEEE"""
 
 def check_in_bounds(map,possition):
     max_y,max_x = map.shape
@@ -79,32 +65,31 @@ def find_region_corners(garden_map,possition,start=None,previous_offset = (-1,0)
     return corner
 
 
-with open("2024/Day12/data.txt") as file:
-    data = file.read()
-    data = temp
+aoc = AoC(day=12, year=2024, use_example=True)
+data = aoc.DATA
 
-    timestamp = timer ()
+timestamp = timer ()
 
-    garden_map = np.array([list(line.strip()) for line in data.split('\n')],dtype=str)
-    fence_map = np.full(garden_map.shape,dtype=int,fill_value=-1)
+garden_map = np.array([list(line.strip()) for line in data.split('\n')],dtype=str)
+fence_map = np.full(garden_map.shape,dtype=int,fill_value=-1)
 
-    total_costs_part1 = 0
-    total_costs_part2 = 0
-    previous_filled = 0
-    previous_fences = 0
-    while next_garden_list := list(zip(*np.where(fence_map == -1))):
-        next_garden = next_garden_list[0]
-        find_connected_region(garden_map,fence_map,next_garden)
-        new_filled = np.count_nonzero(fence_map != -1) - previous_filled
-        new_fences = np.sum(fence_map) + np.count_nonzero(fence_map == -1) - previous_fences
-        total_costs_part1 += new_filled*new_fences
-        previous_fences+=new_fences
-        previous_filled+=new_filled
+total_costs_part1 = 0
+total_costs_part2 = 0
+previous_filled = 0
+previous_fences = 0
+while next_garden_list := list(zip(*np.where(fence_map == -1))):
+    next_garden = next_garden_list[0]
+    find_connected_region(garden_map,fence_map,next_garden)
+    new_filled = np.count_nonzero(fence_map != -1) - previous_filled
+    new_fences = np.sum(fence_map) + np.count_nonzero(fence_map == -1) - previous_fences
+    total_costs_part1 += new_filled*new_fences
+    previous_fences+=new_fences
+    previous_filled+=new_filled
 
-        sides = find_region_corners(garden_map,next_garden)
-        total_costs_part1 += new_filled*sides
+    sides = find_region_corners(garden_map,next_garden)
+    total_costs_part1 += new_filled*sides
 
 
-    print(f"PART1: {total_costs_part1=} in {(timer())-timestamp}sec")
-    print(f"PART1: {total_costs_part2=} in {(timer())-timestamp}sec")
+print(f"PART1: {total_costs_part1=} in {(timer())-timestamp}sec")
+print(f"PART1: {total_costs_part2=} in {(timer())-timestamp}sec")
 

@@ -1,10 +1,9 @@
 from timeit import default_timer as timer
 import re
-
+from aoc_utils.aoc import AoC
 
 REGISTERS = {"A":None,"B":None,"C":None}
 INSTRUCTION_POINTER = None
-
 
 # define functions
 def adv(operant):
@@ -109,32 +108,15 @@ def run_program(program = ""):
     return output_values
 
 
+aoc = AoC(day=17, year=2024, use_example=False, use_example_nr=1)
 
+register_a, register_b, register_c =tuple(map(int,re.findall(r"(\d+)\n",aoc.DATA)))
+program = re.search(r"\d(,\d?)+",aoc.DATA).group()
 
-## PART1 Example usage:
-#register_a = 729
-#register_b = 0
-#register_c = 0
-#program = "0,1,5,4,3,0"
-#output = start_program(program,register_a,register_b,register_c)
-#print(f"{output=} \n{REGISTERS=}")  # Expected output: "4,6,3,5,6,3,5,2,1,0"
+timestamp = timer()
+output = start_program(program,register_a,register_b,register_c)
+output = ",".join(map(str,output))
+#print(f"{output=} \n{REGISTERS=}") 
+print(f"PART1: {output=} in {(timer())-timestamp}sec")
 
-
-with open("2024/Day17/data.txt") as file:
-    data = file.read()
-    register_a, register_b, register_c =tuple(map(int,re.findall(r"(\d+)\n",data)))
-    program = re.search(r"\d(,\d?)+",data).group()
-
-    timestamp = timer()
-    output = start_program(program,register_a,register_b,register_c)
-    output = ",".join(map(str,output))
-    #print(f"{output=} \n{REGISTERS=}") 
-    print(f"PART1: {output=} in {(timer())-timestamp}sec")
-
-
-    ## PART2 Example usage:
-    #register_a = 729
-    #register_b = 0
-    #register_c = 0
-    #program = "0,3,5,4,3,0"
     

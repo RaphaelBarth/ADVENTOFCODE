@@ -1,12 +1,9 @@
 from timeit import default_timer as timer
 import re
-EXAMPLE = False
-if EXAMPLE: 
-    data ="""11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"""
-else:
-    with open("2025/Day2/data.txt") as f:
-        data = f.read().strip()
+from aoc_utils.aoc import AoC
 
+aoc = AoC(day=2, year=2025, use_example=False)
+data = aoc.DATA
 
 timestamp1 = timer()
 
