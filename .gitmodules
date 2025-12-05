@@ -1,0 +1,3 @@
+[submodule "ADVENTOFCODE_DATA"]
+	path = ADVENTOFCODE_DATA
+	url = https://github.com/RaphaelBarth/ADVENTOFCODE_DATA.git
