@@ -25,11 +25,14 @@ class AoC:
     
     def _load_data(self) -> str:   
         """Private method to load puzzle data based on configuration."""
+        file_type = "example" if self._USE_EXAMPLE else "data"
+        file_path = Path(f"ADVENTOFCODE_DATA/{self.YEAR}/Day{self.DAY}/{file_type}.txt").resolve()
+        
+        print(f"Loading example data from: {file_path}")
         if not self._USE_EXAMPLE: 
-            with open(f"{self.YEAR}/Day{self.DAY}/data.txt") as f:
+            with open(file_path) as f:
                 return f.read().strip()
         else:
-            file_path = Path(f"ADVENTOFCODE_DATA/{self.YEAR}/Day{self.DAY}/example.txt").resolve()
             with open(file_path) as f:
                 content = f.read().strip()
                 pattern = r"#Example\s+Part\d+(.*?)(?=#Example\s+Part\d+|$)"
