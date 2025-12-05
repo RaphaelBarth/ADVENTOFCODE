@@ -1,0 +1,9 @@
+[project]
+name = "aoc-utils"
+version = "0.0.1"
+description = "Utilities for Advent of Code solutions"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aoc_utils"]
