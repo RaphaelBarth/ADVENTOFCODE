@@ -1,3 +1,4 @@
+from io import StringIO
 from pathlib import Path
 import re
 
@@ -46,7 +47,14 @@ class AoC:
                     else:
                         raise ValueError(f"Example number {self._USE_EXAMPLE_NR} not found in example.txt")
 
-
+    def get_stream(self) -> StringIO: 
+        """Get the puzzle data as a stream (file-like object)."""
+        if self._USE_EXAMPLE:
+            return StringIO(self.DATA)
+        else:
+            file_path = Path(f"ADVENTOFCODE_DATA/{self.YEAR}/Day{self.DAY}/data.txt").resolve()
+            return open(file_path, 'r')
+    
 
 
 

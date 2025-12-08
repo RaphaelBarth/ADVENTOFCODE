@@ -1,35 +1,19 @@
+from timeit import default_timer as timer
+from functools import cache
+from aoc_utils.aoc import AoC
 
-example = """.......S.......
-...............
-.......^.......
-...............
-......^.^......
-...............
-.....^.^.^.....
-...............
-....^.^...^....
-...............
-...^.^...^.^...
-...............
-..^...^.....^..
-...............
-.^.^.^.^.^...^.
-..............."""
+aco = AoC(day=7, year=2025, use_example=False)
+data = aco.get_stream()
 
-
-
-import io
-data = io.StringIO(example)
-
-data = open("./2025/day6.txt") 
-
+# Read the initial beam positions and splitter positions
 beams_per_line = [i for i, x in enumerate(data.readline()) if x == "S"]
-
 splitters_per_line = []
 for line in data.readlines():
     splitters_per_line.append([i for i, x in enumerate(line) if x == "^"])
-
 #print(beams_per_line,splitters_per_line)
+
+# start PART 1
+timestamp1 = timer()
 
 splitted = 0
 new_beams_per_line=set()
@@ -46,23 +30,24 @@ for splitters in splitters_per_line:
     current_beams_per_line = new_beams_per_line
     new_beams_per_line = set()
 
-print(splitted)
+print(f"PART1: {splitted=} in {(timestamp2:=timer())-timestamp1}sec")
 
+# start PART 2
+timestamp1 = timer()
 depth = len(splitters_per_line)
 
-from functools import cache
 @cache
-def xyz(current_depth:int,beam:int):
+def calculate_beam_paths(current_depth:int,beam:int):
     paths = 0
     if (depth) == current_depth:
         return 1
     if (beam in splitters_per_line[current_depth]):
-        paths += xyz(current_depth+1,beam+1)
-        paths += xyz(current_depth+1,beam-1)
+        paths += calculate_beam_paths(current_depth+1,beam+1)
+        paths += calculate_beam_paths(current_depth+1,beam-1)
     else:
-        paths += xyz(current_depth+1,beam)
+        paths += calculate_beam_paths(current_depth+1,beam)
     return paths
     
 
 beam = beams_per_line[0]   
-print(xyz(0,beam))
+print(f"PART2: {calculate_beam_paths(0,beam)=} in {(timestamp2:=timer())-timestamp1}sec")
