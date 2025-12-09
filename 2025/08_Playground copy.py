@@ -3,9 +3,11 @@ from timeit import default_timer as timer
 from itertools import combinations
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aco = AoC(day=8, year=2025, use_example=False)
 data = aco.DATA
 
+# parse input data to list of junction boxes
 junction_boxes = []
 for data_line in data.split("\n"):
     junction_boxes.append(tuple(map(int,data_line.split(","))))

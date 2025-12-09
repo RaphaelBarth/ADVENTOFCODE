@@ -2,11 +2,13 @@ from timeit import default_timer as timer
 import re
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aoc = AoC(day=2, year=2025, use_example=False)
 data = aoc.DATA
 
 timestamp1 = timer()
 
+# Define regex patterns for range and ID
 PATTERN_RANGE = r"[1-9]\d*-[1-9]\d*"
 PATTERN_ID = r"^(\d+)\1$"
 

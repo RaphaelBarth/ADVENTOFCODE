@@ -1,12 +1,14 @@
 from timeit import default_timer as timer
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aoc = AoC(day=3, year=2025, use_example=False)
 data = aoc.DATA
 
 
 timestamp1 = timer()
 result = 0
+# process each line to find the two largest joltage ratings
 for line in data.split():
     line = list(map(int, line))
     idx = line.index((val1:=max(line[:-1])))
@@ -20,6 +22,7 @@ print(f"PART1: {result=} in {(timestamp2:=timer())-timestamp1}sec")
 timestamp1 = timer()
 
 result = 0
+# process each line to find the twelve largest joltage ratings 
 for line in data.split():
     line = list(map(int, line))
     idx = 0

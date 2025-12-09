@@ -1,6 +1,7 @@
 from timeit import default_timer as timer
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aoc = AoC(day=1, year=2025, use_example=False)
 
 MAX_DIAL_NUMBER = 99

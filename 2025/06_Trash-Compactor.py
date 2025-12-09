@@ -1,8 +1,8 @@
 from timeit import default_timer as timer
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aoc = AoC(day=6, year=2025, use_example=False)
-
 data = aoc.DATA
 
 # start PART 1

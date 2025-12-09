@@ -4,12 +4,11 @@ from shapely import Polygon
 from matplotlib import pyplot as plt
 from aoc_utils.aoc import AoC
 
-
+# initialize AoC instance and read data
 aco = AoC(day=9, year=2025, use_example=False)
 data = aco.DATA
 
 # parse input data to list of tuples
-tiles = []
 tiles = [tuple(map(int, line.split(","))) for line in data.split("\n")]
 #print(tiles)
 

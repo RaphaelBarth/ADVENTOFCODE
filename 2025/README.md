@@ -9,7 +9,7 @@
 | 5   | Day 5  | ⭐     | ⭐     | ✅ Working |
 | 6   | Day 6  | ⭐     | ⭐     | ✅ Working |
 | 7   | Day 7  | ⭐     | ⭐     | ✅ Working |
-| 8   | Day 8  |        |        |            |
+| 9   | Day 8  | ⭐     | ⭐     | ✅ Working |
 | 9   | Day 9  | ⭐     | ⭐     | ✅ Working |
 | 10  | Day 10 |        |        |            |
 | 11  | Day 11 |        |        |            |

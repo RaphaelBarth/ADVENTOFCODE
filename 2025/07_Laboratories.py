@@ -2,6 +2,7 @@ from timeit import default_timer as timer
 from functools import cache
 from aoc_utils.aoc import AoC
 
+# initialize AoC instance and read data
 aco = AoC(day=7, year=2025, use_example=False)
 data = aco.get_stream()
 
@@ -36,6 +37,7 @@ print(f"PART1: {splitted=} in {(timestamp2:=timer())-timestamp1}sec")
 timestamp1 = timer()
 depth = len(splitters_per_line)
 
+# memoized recursive function to calculate beam paths
 @cache
 def calculate_beam_paths(current_depth:int,beam:int):
     paths = 0
