@@ -1,16 +1,15 @@
 from functools import reduce
 from timeit import default_timer as timer
+from itertools import combinations
 from aoc_utils.aoc import AoC
 
-aco = AoC(day=8, year=2025, use_example=True)
+aco = AoC(day=8, year=2025, use_example=False)
 data = aco.DATA
 
 junction_boxes = []
 for data_line in data.split("\n"):
-    x,y,z = map(int,data_line.split(","))
-    junction_boxes.append((x,y,z))
+    junction_boxes.append(tuple(map(int,data_line.split(","))))
 #print(junction_boxes)
-
 
 # calculate euclidean distance between two boxes
 def calculate_distance(box1,box2):
@@ -21,44 +20,76 @@ def calculate_distance(box1,box2):
 
 # start PART 1
 timestamp1 = timer()
-#shortest_distance = {}
-shortest_distance = []
-for box in junction_boxes:
-    nearest_box = min(junction_boxes, key=lambda b: calculate_distance(box,b))
-    distance = calculate_distance(box,nearest_box)
-    #shortest_distance[box] = nearest_box, distance
-    shortest_distance.append((box,nearest_box,distance))
+distance_map = {}
+# calculate distance map between all junction boxes
+for combination in combinations(junction_boxes, 2):
+    distance = calculate_distance(combination[0],combination[1])
+    distance_map.update({distance: combination})
 
-shortest_distance = sorted(shortest_distance, key=lambda x: x[2])
+timestamp2 = None
+circuit_sizes = None
+final_connection = None
 
-print(shortest_distance)
-connections = 0
-circuits = []
-box_used_in_circuit = {}
-for box,neighbor,_ in shortest_distance:
-    # check if box is already in a circuit 
-    if box in box_used_in_circuit and neighbor in box_used_in_circuit:
-        continue
-    if (circuit_id := box_used_in_circuit.get(box)) is not None:
-        box_used_in_circuit[neighbor] = circuit_id
-        circuits[circuit_id].add(neighbor)
-    elif (circuit_id := box_used_in_circuit.get(neighbor)) is not None:
-        box_used_in_circuit[box] = circuit_id
-        circuits[circuit_id].add(box)
+# function to add boxes to circuits
+def add_box_to_circuit(box1, box2,circuits_map):
+    # merge circuits if both boxes are already in circuits
+    if box1 in circuits_map and box2 in circuits_map:
+        circuit1 = circuits_map[box1]
+        circuit2 = circuits_map[box2]
+        circuit1.update(circuit2)
+        for box in circuit2:
+            circuits_map[box] = circuit1        
+    # add box2 to existing circuit of box1
+    elif box1 in circuits_map:
+        circuit = circuits_map[box1]
+        circuits_map[box2] = circuit
+        circuit.update([box2])
+    # add box1 to existing circuit of box2
+    elif box2 in circuits_map:
+        circuit = circuits_map[box2]
+        circuits_map[box1] = circuit
+        circuit.update([box1])
+    # create new circuit with both boxes
     else:
-        circuit_id = len(circuits)
-        circuits.append(set((box,neighbor)))
-        box_used_in_circuit[box] = circuit_id
-        box_used_in_circuit[neighbor] = circuit_id
+        circuit = set([box1, box2])
+        circuits_map[box1] = circuit
+        circuits_map[box2] = circuit
+    return circuits_map
 
+result = None
+connections = 0
+circuits_map = {}
+# process connections to form circuits
+for distance in sorted(distance_map.keys()):
+    box1, box2 = distance_map[distance]
+    circuits_map = add_box_to_circuit(box1, box2, circuits_map)
+    
+    # PART 1 limit to first n-connections 
     connections += 1
-    if connections == 9:
+    if connections == 10_000:
+        circuits_unique = set(map(frozenset, circuits_map.values()))
+        circuit_sizes = sorted(map(len, circuits_unique), reverse=True)
+        result = reduce(lambda a,b: a*b, circuit_sizes[:3], 1)
+        break        
+
+# print circuit sizes result for PART 1
+print(f"PART1: {result=} in {(timestamp2:=timer())-timestamp1}sec")
+
+
+# start PART 2
+timestamp1 = timer()
+
+circuits_map = {}
+for distance in sorted(distance_map.keys()):
+    box1, box2 = distance_map[distance]
+    circuits_map = add_box_to_circuit(box1, box2, circuits_map)
+
+    # PART 2 process all connections
+    if len(junction_boxes) == len(circuits_map[box1]): 
+        final_connection = (box1, box2)
         break
 
-#print(box_used_in_circuit,sep="\n")
-#print("------------------------")
-#print(circuits)
-result = reduce(lambda x, y: x * y, sorted(map(len, circuits))[-3:],1)   
-
-print(f"PART1: {result=} in {(timestamp2:=timer())-timestamp1}sec")
+# print final connections result for PART 2
+result = final_connection[0][0] * final_connection[1][0]
+print(f"PART2: {result=} in {(timestamp2:=timer())-timestamp1}sec")
 
