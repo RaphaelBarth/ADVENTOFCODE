@@ -1,11 +1,12 @@
 from functools import reduce
-from itertools import combinations
+from itertools import combinations, combinations_with_replacement
 import re
+import sys
 from timeit import default_timer as timer
 from aoc_utils.aoc import AoC
 
 # initialize AoC instance and read data
-aco = AoC(day=10, year=2025, use_example=True)
+aco = AoC(day=10, year=2025, use_example=False)
 data = aco.DATA
 
 machine_manuals = []
@@ -68,23 +69,26 @@ timestamp1 = timer()
 
 button_presses_needed = []
 # process each machine manual to determine button presses needed
-for machine in machine_manuals:
+
+for m_idx, machine in enumerate(machine_manuals):
     # determine target value from joltage requirements
     target = list(machine["joltage_requirements"])
     buttons = machine["button_wiring_schematics"]
-    current = len(target)*[0]
-
     idx = 1
+
     found = False
     # find the minimum number of button presses needed to reach the target value using combinations of button values
     while not found:
+        sys.stdout.write(f"\rmachine {m_idx+1}/{len(machine_manuals)} @ {idx=}")
+        sys.stdout.flush()
         # check all combinations of buttons of length idx
-        for combo in combinations(buttons, idx):
+        for combo in combinations_with_replacement(buttons, idx):
             # calculate the xor value of the combination
+            current = len(target)*[0]
             for button in combo:
                 for i in button:
                     current[i] += 1 
-
+            
             if target == current:
                 # record the number of button presses needed, mark as found and continue to next machine
                 button_presses_needed.append(idx)
@@ -92,6 +96,7 @@ for machine in machine_manuals:
                 break
         # increment the combination length if no match was found
         idx += 1
+        print()
 
 
 print(f"PART2: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
