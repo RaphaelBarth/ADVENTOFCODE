@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 from aoc_utils.aoc import AoC
 
 # initialize AoC instance and read data
-aco = AoC(day=10, year=2025, use_example=False)
+aco = AoC(day=10, year=2025, use_example=True)
 data = aco.DATA
 
 machine_manuals = []
@@ -58,3 +58,40 @@ for machine in machine_manuals:
 
 
 print(f"PART1: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
+
+
+
+
+
+# start PART 1
+timestamp1 = timer()
+
+button_presses_needed = []
+# process each machine manual to determine button presses needed
+for machine in machine_manuals:
+    # determine target value from joltage requirements
+    target = list(machine["joltage_requirements"])
+    buttons = machine["button_wiring_schematics"]
+    current = len(target)*[0]
+
+    idx = 1
+    found = False
+    # find the minimum number of button presses needed to reach the target value using combinations of button values
+    while not found:
+        # check all combinations of buttons of length idx
+        for combo in combinations(buttons, idx):
+            # calculate the xor value of the combination
+            for button in combo:
+                for i in button:
+                    current[i] += 1 
+
+            if target == current:
+                # record the number of button presses needed, mark as found and continue to next machine
+                button_presses_needed.append(idx)
+                found = True
+                break
+        # increment the combination length if no match was found
+        idx += 1
+
+
+print(f"PART2: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
