@@ -70,42 +70,25 @@ for machine in machine_manuals:
     buttons = machine["button_wiring_schematics"]
 
     # Create Z3 solver
-    solver = z3.Solver()
+    optimizer = z3.Optimize()
 
     # Create integer variables for each button (number of times pressed)
     button_vars = [z3.Int(f'b{i}') for i in range(len(buttons))]
 
-    iteration = 0
-    while iteration >= 0:
-        # Add constraints: each button press count must be non-negative and integer
-        for var in button_vars:
-            solver.add(var >= 0)
+    # Add constraints: each button press count must be non-negative and integer
+    [optimizer.add(var >= 0) for var in button_vars]
         
-        # Add constraints for each joltage requirement
-        for idx, target_val in enumerate(target):
-            # Sum of button presses that affect this joltage position
-            constraint = z3.Sum([button_vars[j] for j in range(len(buttons)) if idx in buttons[j]]) == target_val
-            solver.add(constraint)
-        
-        x  = solver.assertions()
-
-        solver.add(z3.Sum(button_vars) <= (max(target))+iteration)  # Ensure integer values
-        x  = solver.assertions()
-        if solver.check() == z3.sat:
-            iteration = -1
-        else:
-            solver.reset()
-            iteration += 1
-        
-
-    model = solver.model()
-    # Extract the number of presses for each button
-    total_presses = sum([model.evaluate(var).as_long() for var in button_vars])
-    #print(f"Solution found:{model} in total presses:{total_presses})")
-    button_presses_needed.append(total_presses)
-    solution_found = True
+    # Add constraints for each joltage requirement
+    for idx, target_val in enumerate(target):
+        # Sum of button presses that affect this joltage position
+        constraint = z3.Sum([button_vars[j] for j in range(len(buttons)) if idx in buttons[j]]) == target_val
+        optimizer.add(constraint)
+    
+    # Minimize total button presses
+    model = optimizer.minimize(z3.Sum(button_vars))  
+    optimizer.check()
+    # extract the model (solution) and record the total button presses needed
+    button_presses_needed.append(model.lower().as_string())
      
         
-
-
-print(f"PART2: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
+print(f"PART2: {sum( map(int, button_presses_needed))=} in {(timestamp2:=timer())-timestamp1}sec")
