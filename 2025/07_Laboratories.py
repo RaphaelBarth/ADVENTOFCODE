@@ -3,8 +3,8 @@ from functools import cache
 from aoc_utils.aoc import AoC
 
 # initialize AoC instance and read data
-aco = AoC(day=7, year=2025, use_example=False)
-data = aco.get_stream()
+aoc = AoC(day=7, year=2025, use_example=False)
+data = aoc.get_stream()
 
 # Read the initial beam positions and splitter positions
 beams_per_line = [i for i, x in enumerate(data.readline()) if x == "S"]

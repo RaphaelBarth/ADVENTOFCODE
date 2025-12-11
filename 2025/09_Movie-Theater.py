@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 from aoc_utils.aoc import AoC
 
 # initialize AoC instance and read data
-aco = AoC(day=9, year=2025, use_example=False)
-data = aco.DATA
+aoc = AoC(day=9, year=2025, use_example=False)
+data = aoc.DATA
 
 # parse input data to list of tuples
 tiles = [tuple(map(int, line.split(","))) for line in data.split("\n")]
@@ -52,6 +52,5 @@ print(f"PART2: {largest_rectangle[0]=} in {(timestamp2:=timer())-timestamp1}sec"
 
 # plotting for visualization
 plt.plot(*polygon.exterior.xy)
-print(largest_rectangle[1])
 plt.plot(*zip(*largest_rectangle[1], largest_rectangle[1][0]), color='red')
 plt.show()
