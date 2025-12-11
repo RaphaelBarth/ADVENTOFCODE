@@ -1,26 +1,24 @@
 from functools import reduce
-from itertools import combinations, combinations_with_replacement
+from itertools import combinations
 import re
-import sys
 from timeit import default_timer as timer
+
+import z3 as z3
+
 from aoc_utils.aoc import AoC
 
 # initialize AoC instance and read data
-aco = AoC(day=10, year=2025, use_example=False)
-data = aco.DATA
+aoc = AoC(day=10, year=2025, use_example=False)
 
 machine_manuals = []
 # process each line to extract machine components 
-for lines in data.splitlines():
-    # extract single indicator light diagram
-    temp_matches = re.findall(r'\[([.#]+)\]', lines)
-    single_indicator_light_diagram  = list(temp_matches[0])
-    # extract button wiring schematics and convert to list of tuples
-    temp_matches = re.findall(r'\(([\d,]+)\)', lines)
-    button_wiring_schematics = [tuple(map(int,match.split(','))) for match in temp_matches]
-    # extract joltage requirements and convert to tuple of integers
-    temp_matches = re.findall(r'\{([\d,]+)\}', lines)[0]
-    joltage_requirements = tuple(map(int,temp_matches.split(',')))
+for lines in aoc.get_stream().readlines():
+    # extract single indicator light diagram, button wiring schematics, and joltage requirements using a single regex
+    match = re.search(r'\[([.#]+)\].*?\(([\d,)]+)\).*?\{([\d,]+)\}', lines)
+    if match:
+        single_indicator_light_diagram = list(match.group(1))
+        button_wiring_schematics = [tuple(map(int, m.split(','))) for m in re.findall(r'\(([\d,]+)\)', lines)]
+        joltage_requirements = tuple(map(int, match.group(3).split(',')))
 
     # assemble machine manual
     machine = {"single_indicator_light_diagram": single_indicator_light_diagram,
@@ -61,42 +59,53 @@ for machine in machine_manuals:
 print(f"PART1: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
 
 
-
-
-
-# start PART 1
+# start PART 2
 timestamp1 = timer()
 
 button_presses_needed = []
 # process each machine manual to determine button presses needed
-
-for m_idx, machine in enumerate(machine_manuals):
+for machine in machine_manuals:
     # determine target value from joltage requirements
-    target = list(machine["joltage_requirements"])
+    target = machine["joltage_requirements"]
     buttons = machine["button_wiring_schematics"]
-    idx = 1
 
-    found = False
-    # find the minimum number of button presses needed to reach the target value using combinations of button values
-    while not found:
-        sys.stdout.write(f"\rmachine {m_idx+1}/{len(machine_manuals)} @ {idx=}")
-        sys.stdout.flush()
-        # check all combinations of buttons of length idx
-        for combo in combinations_with_replacement(buttons, idx):
-            # calculate the xor value of the combination
-            current = len(target)*[0]
-            for button in combo:
-                for i in button:
-                    current[i] += 1 
-            
-            if target == current:
-                # record the number of button presses needed, mark as found and continue to next machine
-                button_presses_needed.append(idx)
-                found = True
-                break
-        # increment the combination length if no match was found
-        idx += 1
-        print()
+    # Create Z3 solver
+    solver = z3.Solver()
+
+    # Create integer variables for each button (number of times pressed)
+    button_vars = [z3.Int(f'b{i}') for i in range(len(buttons))]
+
+    iteration = 0
+    while iteration >= 0:
+        # Add constraints: each button press count must be non-negative and integer
+        for var in button_vars:
+            solver.add(var >= 0)
+        
+        # Add constraints for each joltage requirement
+        for idx, target_val in enumerate(target):
+            # Sum of button presses that affect this joltage position
+            constraint = z3.Sum([button_vars[j] for j in range(len(buttons)) if idx in buttons[j]]) == target_val
+            solver.add(constraint)
+        
+        x  = solver.assertions()
+
+        solver.add(z3.Sum(button_vars) <= (max(target))+iteration)  # Ensure integer values
+        x  = solver.assertions()
+        if solver.check() == z3.sat:
+            iteration = -1
+        else:
+            solver.reset()
+            iteration += 1
+        
+
+    model = solver.model()
+    # Extract the number of presses for each button
+    total_presses = sum([model.evaluate(var).as_long() for var in button_vars])
+    #print(f"Solution found:{model} in total presses:{total_presses})")
+    button_presses_needed.append(total_presses)
+    solution_found = True
+     
+        
 
 
 print(f"PART2: {sum(button_presses_needed)=} in {(timestamp2:=timer())-timestamp1}sec")
