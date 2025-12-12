@@ -11,8 +11,8 @@
 | 7   | Day 7  | ⭐     | ⭐     | ✅ Working |
 | 9   | Day 8  | ⭐     | ⭐     | ✅ Working |
 | 9   | Day 9  | ⭐     | ⭐     | ✅ Working |
-| 10  | Day 10 |        |        |            |
-| 11  | Day 11 |        |        |            |
-| 12  | Day 12 |        |        |            |
+| 10  | Day 10 | ⭐     | ⭐     | ✅ Working |
+| 11  | Day 11 | ⭐     | ⭐     | ✅ Working |
+| 12  | Day 11 | ⭐     | ⭐     | ✅ Working |
 
 

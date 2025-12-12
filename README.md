@@ -1,5 +1,12 @@
 # Advent of Code
 
+This repository contains my solutions to [Advent of Code](https://adventofcode.com/) challenges. Each challenge consists of two-part problems that cover various algorithmic and computational topics including graph traversal, dynamic programming, string manipulation, and mathematical computations.
+
+## Repository Structure
+
+Each year has its own directory, with individual day folders containing:
+- **[Puzzle-Name].py** - Python solution file with descriptive naming based on the puzzle theme
+- **Puzzle input data** - Stored in a separate submodule to keep solutions and data organized
 
 ## Setup
 
